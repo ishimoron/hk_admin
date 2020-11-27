@@ -1,7 +1,8 @@
 import React from 'react';
 import { useEffect } from 'react';
-import axios from 'axios';
 import './News.css';
+
+import API from '../utils/API';
 
 import clsx from 'clsx';
 import { withStyles } from '@material-ui/core/styles';
@@ -37,7 +38,7 @@ const News = () => {
 
 	const useStyles = makeStyles((theme) => ({
 		root: {
-			minWidth: 345,
+			maxWidth: 345,
 			marginTop: 70,
 		},
 		media: {
@@ -59,7 +60,6 @@ const News = () => {
 		},
 	}));
 	const classes = useStyles();
-	const ITEM_HEIGHT = 48;
 	const [expanded, setExpanded] = React.useState(false);
 	const handleExpandClick = () => {
 		setExpanded(!expanded);
@@ -68,7 +68,7 @@ const News = () => {
 	// Toggle Menu
 
 	const [anchorEl, setAnchorEl] = React.useState(null);
-	const open = Boolean(anchorEl);
+	// const open = Boolean(anchorEl);
 
 	const handleClick = (event) => {
 		setAnchorEl(event.currentTarget);
@@ -112,8 +112,7 @@ const News = () => {
 	}))(MenuItem);
 
 	useEffect(() => {
-		axios
-			.get('https://www.hcmariupol.com.ua/api/data')
+		API.get('/data')
 			.then(function (response) {
 				// handle success
 				dispatch({

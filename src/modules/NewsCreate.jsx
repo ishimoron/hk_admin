@@ -42,7 +42,7 @@ const NewsCreate = () => {
 			<Typography variant="h4" align="center" component="h1" gutterBottom>
 				🚀 Create new Post
 			</Typography>
-			
+
 			<Form
 				onSubmit={onSubmit}
 				initialValues={{ employed: true, stooge: 'larry' }}
