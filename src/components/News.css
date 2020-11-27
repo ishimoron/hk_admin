@@ -1,0 +1,12 @@
+.news_container {
+    width: 100%;
+    height: 100vh;
+    /* display: flex; */
+    /* flex-wrap: wrap; */
+    overflow-x: hidden;
+    /* align-items: center; */
+    /* justify-content: space-around; */
+}
+.MuiListItemIcon-root {
+    min-width: 35px !important;
+}
