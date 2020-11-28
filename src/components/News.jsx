@@ -30,6 +30,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 
+
 const News = () => {
 	// {
 	// 	data.map((post) => <li key={post.id}>{post.title}</li>);
@@ -38,8 +39,13 @@ const News = () => {
 
 	const useStyles = makeStyles((theme) => ({
 		root: {
-			maxWidth: 345,
+			width: 345,
+			height: 500,
 			marginTop: 70,
+		},
+		titleText: {
+			fontSize: '1rem !important',
+			color: 'blue'
 		},
 		media: {
 			// height: 0,
@@ -54,9 +60,6 @@ const News = () => {
 		},
 		expandOpen: {
 			transform: 'rotate(180deg)',
-		},
-		avatar: {
-			backgroundColor: red[500],
 		},
 	}));
 	const classes = useStyles();
@@ -130,7 +133,10 @@ const News = () => {
 			{state.newsData.map((post) => (
 				<div key={post.id}>
 					<Card className={classes.root}>
+						<CardMedia className={classes.media} component="img" src={post.img} title="Paella dish" />
+
 						<CardHeader
+							className="titleText"
 							action={
 								<IconButton aria-label="settings" onClick={handleClick}>
 									<MoreVertIcon />
@@ -138,8 +144,13 @@ const News = () => {
 							}
 							title={post.title}
 							// subheader={post.date}
-							subheader={post.subtitle}
-						/>
+							// subheader={post.subtitle}
+						>
+							{/* <Typography variant="body2" color="textSecondary" component="p">
+							{post.title}
+							</Typography> */}
+						</CardHeader>
+						
 
 						<StyledMenu
 							id="customized-menu"
@@ -168,8 +179,6 @@ const News = () => {
 							</StyledMenuItem> */}
 						</StyledMenu>
 
-						<CardMedia className={classes.media} component="img" src={post.img} title="Paella dish" />
-
 						<CardContent>
 							<Typography variant="body2" color="textSecondary" component="p">
 								post date: {post.date}
@@ -184,30 +193,14 @@ const News = () => {
 								updated at: {post.updated_at}
 							</Typography>
 						</CardContent>
-						<CardActions disableSpacing>
-							<IconButton aria-label="add to favorites">
-								<FavoriteIcon />
-							</IconButton>
-							<IconButton aria-label="share">
-								<ShareIcon />
-							</IconButton>
-							<IconButton
-								className={clsx(classes.expand, {
-									[classes.expandOpen]: expanded,
-								})}
-								onClick={handleExpandClick}
-								aria-expanded={expanded}
-								aria-label="show more"
-							>
-								<ExpandMoreIcon />
-							</IconButton>
-						</CardActions>
-						<Collapse in={expanded} timeout="auto" unmountOnExit>
+						
+						
+						{/* <Collapse in={expanded} timeout="auto" unmountOnExit>
 							<CardContent>
 								<Typography paragraph>Post Text:</Typography>
 								<Typography paragraph>{post.text}</Typography>
 							</CardContent>
-						</Collapse>
+						</Collapse> */}
 					</Card>
 				</div>
 			))}
