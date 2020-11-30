@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
-import TextField from '@material-ui/core/TextField';
-import { Typography, Paper, Grid, Button, CssBaseline } from '@material-ui/core';
+import { Typography, Paper, Grid, Button, CssBaseline, TextField } from '@material-ui/core';
+
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
@@ -9,7 +9,6 @@ import 'react-modern-calendar-datepicker/lib/DatePicker.css';
 import DatePicker from 'react-modern-calendar-datepicker';
 import { utils } from 'react-modern-calendar-datepicker';
 
-import API from '../utils/API';
 
 const NewsCreate = () => {
 	const gregorianToday = utils().getToday();
@@ -21,47 +20,58 @@ const NewsCreate = () => {
 		subtitle: '',
 		text: '',
 		img: 'some src',
-		date: { selectedDay },
-		category: '',
+		date: `${selectedDay.day}-${selectedDay.month}-${selectedDay.year}`,
+		category: 1,
 	});
-	const handleSubmit = () => {
-		API.post('/create', {
-			title: body.Title,
-			subtitle: body.subtitle,
-			img: body.img,
-			date: body.date,
-			category: body.category,
-		})
-			.then(function (response) {
-				console.log(response);
-			})
-			.catch(function (error) {
-				console.log(error);
-			});
-		// alert(body)
+
+	const handleSubmit = async () => {
+		const response = await fetch('https://www.hcmariupol.com.ua/api/create', {
+			method: 'POST',
+			body: JSON.stringify(body),
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		});
+
+		const result = await response.text();
+
+		console.log(result);
 	};
+	// const handleSubmit = () => {
+	// 	API.get('/create', {
+	// 		title: body.Title,
+	// 		subtitle: body.subtitle,
+	// 		text: body.text,
+	// 		img: body.img,
+	// 		date: body.date,
+	// 		category: body.category,
+	// 	})
+	// 		.then(function (response) {
+	// 			console.log(response);
+	// 		})
+	// 		.catch(function (error) {
+	// 			console.log(error);
+	// 		});
+	// };
 	console.log(body);
 
 	const handleTitle = (e) => {
 		setBody({
+			...body,
 			title: e.target.value,
 		});
 	};
 
 	const handleSubtitle = (e) => {
 		setBody({
+			...body,
 			subtitle: e.target.value,
-		});
-	};
-
-	const handleText = (e) => {
-		setBody({
-			text: e.target.value,
 		});
 	};
 
 	const handleCategory = (e) => {
 		setBody({
+			...body,
 			category: e.target.value,
 		});
 	};
@@ -72,30 +82,39 @@ const NewsCreate = () => {
 			<Typography variant="h4" align="center" component="h1" gutterBottom>
 				🚀 Create new Post
 			</Typography>
-			<form onSubmit={handleSubmit} noValidate>
+			<form>
 				<Paper style={{ padding: 20 }}>
-					<Grid container alignItems="flex-start" spacing={2}>
+					<Grid container alignItems="center" spacing={2}>
 						<Grid item xs={12}>
-							<TextField name="Title" fullWidth type="text" label="Title" onChange={handleTitle} />
+							<TextField
+								name="title"
+								fullWidth
+								type="text"
+								label="Title"
+								onChange={handleTitle}
+								required
+							/>
 						</Grid>
 						<Grid item xs={12}>
 							<TextField
-								name="SubTitle"
+								name="subtitle"
 								fullWidth
 								type="text"
 								label="SubTitle"
+								required
 								onChange={handleSubtitle}
 							/>
 						</Grid>
-						<Grid item xs={12}>
+						{/* <Grid item xs={12}>
 							<TextField
-								name="Category"
+								name="category"
 								fullWidth
 								type="text"
 								label="Category"
+								required
 								onChange={handleCategory}
 							/>
-						</Grid>
+						</Grid> */}
 
 						<Grid item xs={12}>
 							<CKEditor
@@ -108,6 +127,7 @@ const NewsCreate = () => {
 								onChange={(event, editor) => {
 									const data = editor.getData();
 									setBody({
+										...body,
 										text: data,
 									});
 								}}
@@ -129,8 +149,8 @@ const NewsCreate = () => {
 							/>
 						</Grid>
 
-						<Grid item style={{ marginTop: 16 }}>
-							<Button variant="contained" color="primary" type="submit">
+						<Grid item xs={12} style={{ marginTop: 16 }}>
+							<Button variant="contained" color="primary" type="button" fullWidth onClick={handleSubmit}>
 								Submit
 							</Button>
 						</Grid>

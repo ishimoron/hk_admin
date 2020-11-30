@@ -5,7 +5,7 @@
     flex-wrap: wrap;
     overflow-x: hidden;
     align-items: center;
-    justify-content: space-around;
+    justify-content: center;
 }
 .MuiListItemIcon-root {
     min-width: 35px !important;
