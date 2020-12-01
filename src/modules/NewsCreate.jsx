@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { Typography, Paper, Grid, Button, CssBaseline, TextField } from '@material-ui/core';
 
@@ -9,20 +9,30 @@ import 'react-modern-calendar-datepicker/lib/DatePicker.css';
 import DatePicker from 'react-modern-calendar-datepicker';
 import { utils } from 'react-modern-calendar-datepicker';
 
+import { useFileUpload } from 'use-file-upload';
 
 const NewsCreate = () => {
+	// upload image
+	const defaultSrc = 'https://www.pngkit.com/png/full/313-3132524_png-file-svg-file-upload-black-png.png';
+	const [files, selectFiles] = useFileUpload();
+
 	const gregorianToday = utils().getToday();
 	const [selectedDay, setSelectedDay] = useState(gregorianToday);
-	console.log(selectedDay);
-
+	// console.log(selectedDay);
 	const [body, setBody] = useState({
 		title: '',
 		subtitle: '',
 		text: '',
-		img: 'some src',
+		img: files?.source,
 		date: `${selectedDay.day}-${selectedDay.month}-${selectedDay.year}`,
 		category: 1,
 	});
+	useEffect(() => {
+		setBody({
+			...body,
+			img: files?.source,
+		});
+	}, [files]);
 
 	const handleSubmit = async () => {
 		const response = await fetch('https://www.hcmariupol.com.ua/api/create', {
@@ -69,10 +79,10 @@ const NewsCreate = () => {
 		});
 	};
 
-	const handleCategory = (e) => {
+	const handleImage = (e) => {
 		setBody({
 			...body,
-			category: e.target.value,
+			img: files,
 		});
 	};
 
@@ -119,7 +129,7 @@ const NewsCreate = () => {
 						<Grid item xs={12}>
 							<CKEditor
 								editor={ClassicEditor}
-								data="<p>Hello from CKEditor 5!</p>"
+								data=""
 								// onReady={(editor) => {
 								// 	// You can store the "editor" and use when it is needed.
 								// 	console.log('Editor is ready to use!', editor);
@@ -138,6 +148,24 @@ const NewsCreate = () => {
 								// 	console.log('Focus.', editor);
 								// }}
 							/>
+						</Grid>
+
+						<Grid container item xs={12} justify="center" alignItems="center">
+							<img
+								src={files?.source || defaultSrc}
+								alt="preview"
+								style={{ width: '30%', height: '30%' }}
+							/>
+							<Button
+								onClick={() =>
+									selectFiles({ accept: 'image/*' }, ({ source }) => {
+										console.log('Files Selected', { source });
+									})
+								}
+								onChange={handleImage}
+							>
+								Upload Avatar
+							</Button>
 						</Grid>
 
 						<Grid container item xs={12} justify="center" alignItems="center">
